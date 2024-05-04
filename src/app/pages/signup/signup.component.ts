@@ -1,15 +1,35 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
+import { FirebaseService } from 'src/app/services/FirebaseService.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
-  styleUrls: ['./signup.component.css']
+  styleUrls: ['./signup.component.css'],
 })
-export class SignupComponent implements OnInit {
 
-  constructor() { }
+export class SignupComponent {
+  @Output() isSigned = new EventEmitter<void>()
 
-  ngOnInit(): void {
+  isSignedIn = false;
+  constructor(public firebaseService : FirebaseService, private router: Router) {}
+
+  ngOnInit() {
+    if(localStorage.getItem('user') !== null)
+    this.isSignedIn = true
+    else
+    this.isSignedIn = false
+  }
+
+  async onSignup(email: string, password: string) {
+    await this.firebaseService.signUp(email, password)
+    if(this.firebaseService.isLogged)
+      {
+        this.isSignedIn = true
+        this.router.navigateByUrl('');
+        this.isSigned.emit();
+
+      }
   }
 
 }

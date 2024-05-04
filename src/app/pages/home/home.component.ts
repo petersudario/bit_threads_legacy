@@ -9,16 +9,12 @@ import { FirebaseService } from 'src/app/services/FirebaseService.service';
 })
 export class HomeComponent implements OnInit {
 
-  @Output() isLogout = new EventEmitter<void>()
+  isSignedIn = false;
+  constructor(public firebaseService: FirebaseService) {}
 
-  constructor(public firebaseService : FirebaseService) { }
-
-  ngOnInit(): void {
-  }
-
-  logout() {
-    this.firebaseService.logout();
-    this.isLogout.emit();
+  ngOnInit() {
+    if (localStorage.getItem('user') !== null) this.isSignedIn = true;
+    else this.isSignedIn = false;
   }
 
 }

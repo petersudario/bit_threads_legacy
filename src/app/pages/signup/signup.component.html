@@ -1,1 +1,60 @@
-<p>signup works!</p>
+<!-- Section: Design Block -->
+<section class="">
+  <!-- Jumbotron -->
+  <div class="px-4 py-5 px-md-5 text-center text-lg-start" style="background-color: hsl(0, 0%, 96%)">
+    <div class="container">
+      <div class="row gx-lg-5 align-items-center">
+        <div class="col-lg-6 mb-5 mb-lg-0">
+          <h1 class="my-5 display-3 fw-bold ls-tight">
+            Bit Threads <br />
+            <span class="text-primary">De bits. Para Pessoas.</span>
+          </h1>
+          <p style="color: hsl(217, 10%, 50.8%)">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit.
+            Eveniet, itaque accusantium odio, soluta, corrupti aliquam
+            quibusdam tempora at cupiditate quis eum maiores libero
+            veritatis? Dicta facilis sint aliquid ipsum atque?
+          </p>
+        </div>
+
+        <div class="col-lg-6 mb-5 mb-lg-0">
+          <div class="card">
+            <div class="card-body py-5 px-md-5">
+              <form>
+                <div class="row">
+                  <div class="col-md-6 mb-4">
+                    <div data-mdb-input-init class="form-outline">
+                      <label class="form-label" for="form3Example1">Nome</label>
+                      <input type="text" id="form3Example1" class="form-control" />
+                    </div>
+                  </div>
+                  <div class="col-md-6 mb-4">
+                    <div data-mdb-input-init class="form-outline">
+                      <label class="form-label" for="form3Example2">Sobrenome</label>
+                      <input type="text" id="form3Example2" class="form-control" />
+                    </div>
+                  </div>
+                </div>
+
+                <div data-mdb-input-init class="form-outline mb-4">
+                  <label class="form-label" for="emnail">E-mail</label>
+                  <input type="email" #emailSignup id="email" class="form-control" />
+                </div>
+
+                <div data-mdb-input-init class="form-outline mb-4">
+                  <label class="form-label" for="password">Senha</label>
+                  <input type="password" #passwordSignup id="password" class="form-control" />
+                </div>
+
+
+                <button type="button" (click)="onSignup(emailSignup.value, passwordSignup.value)" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-4">
+                  Cadastrar
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

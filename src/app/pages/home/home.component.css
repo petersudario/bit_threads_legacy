@@ -1,0 +1,55 @@
+
+.hero-section {
+  background-color: #d6c8a3;
+  color: #fff;
+  padding: 100px 0;
+  text-align: center;
+}
+.feature-section {
+  padding: 100px 0;
+  background-color: #f8f9fa;
+}
+.feature-icon {
+  font-size: 60px;
+  color: #007bff;
+}
+.feature-title {
+  font-weight: bold;
+  margin-top: 20px;
+}
+.feature-description {
+  margin-top: 20px;
+}
+.cta-section {
+  padding: 100px 0;
+  background-color: #343a40;
+  color: #fff;
+  text-align: center;
+}
+.cta-title {
+  font-size: 36px;
+  margin-bottom: 20px;
+}
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+.btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+}
+
+.py-5 {
+  padding-top: 5rem !important;
+  padding-bottom: 5rem !important;
+}
+.card {
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+.card:hover {
+  transform: translateY(-5px);
+  cursor: pointer;
+}
