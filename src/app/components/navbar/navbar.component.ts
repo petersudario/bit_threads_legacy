@@ -28,4 +28,11 @@ export class NavbarComponent implements OnInit {
   redirect(route: string){
     this.router.navigate([route]);
   }
+
+  isRoute(route: string){
+    if (this.router.url === route){
+      return true;
+    }
+    return false
+  }
 }

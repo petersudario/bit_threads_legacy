@@ -9,9 +9,10 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { SigninComponent } from './pages/signin/signin.component';
 import { SignupComponent } from './pages/signup/signup.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { ThreadsComponent } from './pages/threads/threads.component';
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, NavbarComponent, SigninComponent, SignupComponent, FooterComponent],
+  declarations: [AppComponent, HomeComponent, NavbarComponent, SigninComponent, SignupComponent, FooterComponent, ThreadsComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
