@@ -1,0 +1,18 @@
+<app-navbar></app-navbar>
+
+<div *ngIf="!isSignedIn">
+<h2>Sign Up</h2>
+  <input type="text" #emailSignup />
+  <input type="password" #passwordSignup />
+  <button (click)="onSignup(emailSignup.value, passwordSignup.value)">Sign Up</button>
+</div>
+
+<hr>
+<div *ngIf="!isSignedIn">
+  <h2>Sign In</h2>
+    <input type="text" #email />
+    <input type="password" #password />
+    <button (click)="onSignin(email.value, password.value)">Sign In</button>
+</div>
+
+<app-home *ngIf="isSignedIn" (isLogout)="handleLogout()"></app-home>
