@@ -17,11 +17,12 @@ export class NavbarComponent implements OnInit {
     else this.isSignedIn = false;
   }
 
-  logout() {
+  async logout() {
     this.isSignedIn = false;
-    this.firebaseService.logout();
-    this.router.navigate(['']);
+    await this.firebaseService.logout();
     this.isLogout.emit();
+    await this.router.navigate(['']);
+    window.location.reload()
   }
 
   redirect(route: string){

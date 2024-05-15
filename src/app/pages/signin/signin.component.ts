@@ -23,9 +23,11 @@ export class SigninComponent {
     await this.firebaseService.signIn(email, password);
     if (this.firebaseService.isLogged) {
       this.isSignedIn = true;
-      this.router.navigateByUrl('');
       this.isSigned.emit();
     }
+    await this.router.navigateByUrl('');
+    window.location.reload()
+
   }
 
   redirect(route: string){
