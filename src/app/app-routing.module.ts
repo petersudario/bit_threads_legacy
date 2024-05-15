@@ -4,6 +4,7 @@ import { SigninComponent } from './pages/signin/signin.component';
 import { HomeComponent } from './pages/home/home.component';
 import { SignupComponent } from './pages/signup/signup.component';
 import { ThreadsComponent } from './pages/threads/threads.component';
+import { PostComponent } from './post/post.component';
 
 
 const routes: Routes = [
@@ -24,6 +25,10 @@ const routes: Routes = [
   {
     path: 'threads',
     component: ThreadsComponent
+  },
+  {
+    path: 'threads/create_thread',
+    component: PostComponent
   }
 ];
 

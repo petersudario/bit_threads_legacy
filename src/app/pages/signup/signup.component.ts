@@ -28,7 +28,6 @@ export class SignupComponent {
         this.isSignedIn = true
         this.router.navigateByUrl('');
         this.isSigned.emit();
-
       }
   }
 

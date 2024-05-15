@@ -10,9 +10,10 @@ import { SigninComponent } from './pages/signin/signin.component';
 import { SignupComponent } from './pages/signup/signup.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { ThreadsComponent } from './pages/threads/threads.component';
+import { PostComponent } from './post/post.component';
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, NavbarComponent, SigninComponent, SignupComponent, FooterComponent, ThreadsComponent],
+  declarations: [AppComponent, HomeComponent, NavbarComponent, SigninComponent, SignupComponent, FooterComponent, ThreadsComponent, PostComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

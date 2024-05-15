@@ -19,7 +19,6 @@ export class NavbarComponent implements OnInit {
 
   logout() {
     this.isSignedIn = false;
-    console.log("Logging out")
     this.firebaseService.logout();
     this.router.navigate(['']);
     this.isLogout.emit();
