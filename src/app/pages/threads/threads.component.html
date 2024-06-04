@@ -35,7 +35,7 @@
             <button type="button" class="btn btn-outline-secondary btn-sm">
               <i class="far fa-share-square me-1"></i> Share
             </button>
-            <button
+            <button *ngIf="thread.username === loggedUser"
               type="button"
               class="btn btn-outline-danger btn-sm float-end"
             >
