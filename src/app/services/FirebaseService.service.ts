@@ -40,6 +40,7 @@ export class FirebaseService {
   }
 
   async addDocument(
+    username: string,
     postTitle: string,
     date: Date,
     postText: string,
@@ -63,6 +64,7 @@ export class FirebaseService {
       const downloadURL = await snapshot.ref.getDownloadURL();
 
       const data = {
+        username: username,
         postTitle: postTitle,
         date: date,
         postText: postText,
@@ -88,6 +90,11 @@ export class FirebaseService {
         });
       })
     );
+  }
+
+  is_owner(thread: any) {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    return user.uid === thread.userId;
   }
 
   readFileContent(file: File): Promise<ArrayBuffer> {

@@ -7,8 +7,10 @@ import { Router } from '@angular/router';
   styleUrls: ['./post.component.css'],
 })
 export class PostComponent implements OnInit {
-
-  constructor(public firebaseService : FirebaseService, private router: Router) {}
+  constructor(
+    public firebaseService: FirebaseService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {}
 
@@ -29,10 +31,30 @@ export class PostComponent implements OnInit {
     reader.readAsDataURL(file);
   }
 
-  async onPosting(postTitle: string, postText: string, imageInput: HTMLInputElement) {
-    const date = new Date();
-    await this.firebaseService.addDocument(postTitle, date, postText, imageInput.files && imageInput.files.length > 0 ? imageInput : null);
-    this.router.navigateByUrl('threads');
+  async getUserEmail(): Promise<string> {
+    const username = (await this.firebaseService.firebaseAuth.currentUser)
+      ?.email;
+    if (!username) {
+      throw new Error('User not logged in');
+    }
+    const trimmedUsername = username.split('@')[0];
+    return trimmedUsername;
   }
 
+  async onPosting(
+    postTitle: string,
+    postText: string,
+    imageInput: HTMLInputElement
+  ) {
+    const date = new Date();
+    const username = this.getUserEmail();
+    this.firebaseService.addDocument(
+      await username,
+      postTitle,
+      date,
+      postText,
+      imageInput.files && imageInput.files.length > 0 ? imageInput : null
+    );
+    this.router.navigateByUrl('threads');
+  }
 }
