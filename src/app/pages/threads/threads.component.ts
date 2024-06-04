@@ -24,9 +24,15 @@ export class ThreadsComponent implements OnInit {
     });
   }
 
+  deleteThread(thread: any) {
+    this.firebaseService.deleteDocument(thread.id);
+    this.fetchThreads();
+  }
+
   fetchThreads() {
     this.firebaseService.getDocuments().subscribe((threads: any[]) => {
       this.threads = threads;
+      console.log(this.threads);
       this.threads.map((thread) => {
         let today = new Date();
         let difference = today.getTime() - thread.date.toDate().getTime();

@@ -70,7 +70,6 @@ export class FirebaseService {
 
         await this.firebaseStore.collection('threads').add(data);
 
-        console.log('Document added successfully.');
       } else {
         const data = {
           username: username,
@@ -82,11 +81,18 @@ export class FirebaseService {
 
         await this.firebaseStore.collection('threads').add(data);
 
-        console.log('Document added successfully.');
       }
 
     } catch (error) {
       console.error('Error uploading image or adding document: ', error);
+    }
+  }
+
+  async deleteDocument(id: string) {
+    try {
+      await this.firebaseStore.collection('threads').doc(id).delete();
+    } catch (error) {
+      console.error('Error deleting document: ', error);
     }
   }
 
@@ -100,11 +106,6 @@ export class FirebaseService {
         });
       })
     );
-  }
-
-  is_owner(thread: any) {
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    return user.uid === thread.userId;
   }
 
   readFileContent(file: File): Promise<ArrayBuffer> {
