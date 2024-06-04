@@ -44,37 +44,47 @@ export class FirebaseService {
     postTitle: string,
     date: Date,
     postText: string,
-    fileInput: HTMLInputElement
+    fileInput: HTMLInputElement | null
   ) {
     try {
-      const imageFile = fileInput.files?.[0];
-      if (!imageFile) {
-        throw new Error('No file selected');
+      if (fileInput && fileInput.files && fileInput.files.length > 0) {
+        const imageFile = fileInput.files[0];
+        const fileContent = await this.readFileContent(imageFile);
+
+        const uploadedFile = new File([fileContent], imageFile.name, {
+          type: imageFile.type,
+        });
+
+        const storageRef = this.firebaseStorage.ref('');
+        const imageRef = storageRef.child(uploadedFile.name);
+        const snapshot = await imageRef.put(uploadedFile);
+        const downloadURL = await snapshot.ref.getDownloadURL();
+
+        const data = {
+          username: username,
+          postTitle: postTitle,
+          date: date,
+          postText: postText,
+          imageUrl: downloadURL ? downloadURL : '',
+        };
+
+        await this.firebaseStore.collection('threads').add(data);
+
+        console.log('Document added successfully.');
+      } else {
+        const data = {
+          username: username,
+          postTitle: postTitle,
+          date: date,
+          postText: postText,
+          imageUrl: '',
+        };
+
+        await this.firebaseStore.collection('threads').add(data);
+
+        console.log('Document added successfully.');
       }
 
-      const fileContent = await this.readFileContent(imageFile);
-
-      const uploadedFile = new File([fileContent], imageFile.name, {
-        type: imageFile.type,
-      });
-
-      const storageRef = this.firebaseStorage.ref('');
-      const imageRef = storageRef.child(uploadedFile.name);
-      const snapshot = await imageRef.put(uploadedFile);
-      const downloadURL = await snapshot.ref.getDownloadURL();
-
-      const data = {
-        username: username,
-        postTitle: postTitle,
-        date: date,
-        postText: postText,
-        imageUrl: downloadURL,
-      };
-
-      // Add the data to Firestore
-      await this.firebaseStore.collection('threads').add(data);
-
-      console.log('Document added successfully.');
     } catch (error) {
       console.error('Error uploading image or adding document: ', error);
     }

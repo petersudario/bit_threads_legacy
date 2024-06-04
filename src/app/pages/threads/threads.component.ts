@@ -42,7 +42,9 @@ export class ThreadsComponent implements OnInit {
           else if (secondsDifference > 0) {
             thread.date = secondsDifference + ' segundo(s) atrás';
           }
-
+          else {
+            thread.date = 'Agora';
+          }
           });
       });
     }
