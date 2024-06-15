@@ -1,0 +1,78 @@
+.drop-container {
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  padding: 20px; /* Adjust padding for all screen sizes */
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  background-color: white;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: black;
+  border-radius: 4px; 
+}
+
+.drop-container p {
+  margin: 0;
+  font-size: 16px;
+  color: #555;
+}
+
+.drop-container.dragover {
+  background-color: #f0f0f0;
+}
+
+.drop-container button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.drop-container button:hover {
+  background-color: #0056b3;
+}
+
+.img-fluid {
+  max-width: 100%;
+  height: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 5px;
+}
+
+@media (max-width: 768px) {
+  .drop-container {
+    padding: 15px; /* Adjust padding for medium screens */
+  }
+  
+  .drop-container p {
+    font-size: 14px;
+  }
+  
+  .drop-container button {
+    padding: 8px 16px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 576px) {
+  .drop-container {
+    padding: 10px; /* Adjust padding for small screens */
+  }
+  
+  .drop-container p {
+    font-size: 12px;
+  }
+  
+  .drop-container button {
+    padding: 6px 12px;
+    font-size: 10px;
+  }
+}

@@ -22,6 +22,7 @@ export class PostComponent implements OnInit {
     this.convertToBase64(file);
     this.imageUploaded.emit(file);
   }
+  
 
   convertToBase64(file: File) {
     const reader = new FileReader();

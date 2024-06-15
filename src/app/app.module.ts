@@ -11,9 +11,22 @@ import { SignupComponent } from './pages/signup/signup.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { ThreadsComponent } from './pages/threads/threads.component';
 import { PostComponent } from './post/post.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatDialogModule } from '@angular/material/dialog';
+import { ModalComponent } from './components/edit-modal/modal-component.component';
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, NavbarComponent, SigninComponent, SignupComponent, FooterComponent, ThreadsComponent, PostComponent],
+  declarations: [
+    AppComponent,
+    HomeComponent,
+    NavbarComponent,
+    SigninComponent,
+    SignupComponent,
+    FooterComponent,
+    ThreadsComponent,
+    PostComponent,
+    ModalComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -27,8 +40,11 @@ import { PostComponent } from './post/post.component';
       messagingSenderId: '946417477635',
       measurementId: 'G-9ZYKCKYFPQ',
     }),
+    BrowserAnimationsModule,
+    MatDialogModule,
   ],
   providers: [FirebaseService],
   bootstrap: [AppComponent],
+  entryComponents: [ModalComponent],
 })
 export class AppModule {}

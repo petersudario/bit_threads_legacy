@@ -88,6 +88,14 @@ export class FirebaseService {
     }
   }
 
+  async updateDocument(id: string, data: any) {
+    try {
+      await this.firebaseStore.collection('threads').doc(id).update(data);
+    } catch (error) {
+      console.error('Error updating document: ', error);
+    }
+  }
+
   async deleteDocument(id: string) {
     try {
       await this.firebaseStore.collection('threads').doc(id).delete();

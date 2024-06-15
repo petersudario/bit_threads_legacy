@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FirebaseService } from 'src/app/services/FirebaseService.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ModalComponent } from '../../components/edit-modal/modal-component.component';
 
 @Component({
   selector: 'app-threads',
@@ -8,7 +10,10 @@ import { FirebaseService } from 'src/app/services/FirebaseService.service';
 })
 export class ThreadsComponent implements OnInit {
   threads: any[] = [];
-  constructor(public firebaseService: FirebaseService) {}
+  constructor(
+    public firebaseService: FirebaseService,
+    public dialog: MatDialog
+  ) {}
   loggedUser: string = '';
 
   ngOnInit(): void {
@@ -29,10 +34,20 @@ export class ThreadsComponent implements OnInit {
     this.fetchThreads();
   }
 
+  openEdit(thread: any) {
+    const dialogRef = this.dialog.open(ModalComponent, {
+      width: '400px',
+      data: thread,
+    });
+  }
+
+  closeEdit(thread: any) {
+    this.dialog.closeAll();
+  }
+
   fetchThreads() {
     this.firebaseService.getDocuments().subscribe((threads: any[]) => {
       this.threads = threads;
-      console.log(this.threads);
       this.threads.map((thread) => {
         let today = new Date();
         let difference = today.getTime() - thread.date.toDate().getTime();
