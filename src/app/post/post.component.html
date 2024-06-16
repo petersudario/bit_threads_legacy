@@ -3,23 +3,27 @@
     <h2 class="pb-4 text-light">Post a Thread</h2>
     <div class="col-md-12 mb-4 d-flex justify-content-center">
       <div class="container mw-50 w-50">
-        <form [formGroup]="postForm" (ngSubmit)="onPosting()">
+        <form [formGroup]="postForm">
           <div class="row">
             <div data-mdb-input-init class="form-outline mb-4">
               <label class="form-label" for="postTitle">Título</label>
               <input type="text" id="postTitle" class="form-control" formControlName="postTitle" />
-              <div *ngIf="postForm.get('postTitle').invalid && postForm.get('postTitle').touched" class="text-danger">
-                <div *ngIf="postForm.get('postTitle').errors?.required">Título é obrigatório.</div>
-                <div *ngIf="postForm.get('postTitle').errors?.empty">Título não pode estar vazio.</div>
+              <div *ngIf="postForm.get('postTitle').hasError('required')" class="text-danger">
+                Título é obrigatório.
+              </div>
+              <div *ngIf="postForm.get('postTitle').hasError('empty')" class="text-danger">
+                Título não pode estar vazio.
               </div>
             </div>
           </div>
           <div data-mdb-input-init class="form-outline mb-4">
             <label class="form-label" for="postText">Escreva seu Thread</label>
             <textarea id="postText" class="form-control" formControlName="postText"></textarea>
-            <div *ngIf="postForm.get('postText').invalid && postForm.get('postText').touched" class="text-danger">
-              <div *ngIf="postForm.get('postText').errors?.required">Texto do thread é obrigatório.</div>
-              <div *ngIf="postForm.get('postText').errors?.empty">Texto do thread não pode estar vazio.</div>
+            <div *ngIf="postForm.get('postText').hasError('required')" class="text-danger">
+              Texto do thread é obrigatório.
+            </div>
+            <div *ngIf="postForm.get('postText').hasError('empty')" class="text-danger">
+              Texto do thread não pode estar vazio.
             </div>
           </div>
           <div class="container mb-4">
@@ -32,12 +36,12 @@
                 </div>
                 <div class="drop-container border border-dashed border-3 border-secondary rounded p-5 text-center">
                   <p class="mb-0">Arraste e solte a imagem aqui ou clique para selecionar</p>
-                  <input type="file" id="imageInput" class="form-control-file mt-3" (change)="onFileSelected($event)" accept="image/*" formControlName="imageInput" />
+                  <input type="file" #imageInput id="imageInput" class="form-control-file mt-3" (change)="onFileSelected($event)" accept="image/*" formControlName="imageInput" />
                 </div>
               </div>
             </div>
           </div>
-          <button type="submit" class="btn btn-primary btn-block mb-4">
+          <button type="button" (click)="onPosting(imageInput)" class="btn btn-primary btn-block mb-4">
             Enviar
           </button>
 
