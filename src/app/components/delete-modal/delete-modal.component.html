@@ -1,0 +1,10 @@
+<h1 class="card-header">Confirmação</h1>
+<div mat-dialog-content class="card">
+  <div class="card-body">
+    <p class="card-text">Tem certeza que deseja excluir a thread?</p>
+  </div>
+  <div class="card-footer d-flex justify-content-end">
+    <button class="btn btn-success me-2" (click)="deleteThread()" mat-button>Sim</button>
+    <button class="btn btn-danger" (click)="closeDelete(data)" mat-button>Não, cancelar</button>
+  </div>
+</div>

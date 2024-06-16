@@ -2,12 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { FirebaseService } from 'src/app/services/FirebaseService.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalComponent } from '../../components/edit-modal/modal-component.component';
+import { DeleteModalComponent } from '../../components/delete-modal/delete-modal.component';
 
 @Component({
   selector: 'app-threads',
   templateUrl: './threads.component.html',
   styleUrls: ['./threads.component.css'],
 })
+
 export class ThreadsComponent implements OnInit {
   threads: any[] = [];
   constructor(
@@ -29,20 +31,17 @@ export class ThreadsComponent implements OnInit {
     });
   }
 
-  deleteThread(thread: any) {
-    this.firebaseService.deleteDocument(thread.id);
-    this.fetchThreads();
-  }
-
   openEdit(thread: any) {
-    const dialogRef = this.dialog.open(ModalComponent, {
+    this.dialog.open(ModalComponent, {
       width: '400px',
       data: thread,
     });
   }
 
-  closeEdit(thread: any) {
-    this.dialog.closeAll();
+  openDelete(thread: any) {
+    this.dialog.open(DeleteModalComponent, {
+      data: thread,
+    });
   }
 
   fetchThreads() {
