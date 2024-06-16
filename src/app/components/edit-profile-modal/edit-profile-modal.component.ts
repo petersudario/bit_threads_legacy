@@ -22,6 +22,9 @@ export class EditProfileModalComponent implements OnInit {
   @Output() imageUploaded = new EventEmitter<File>();
   imageUrl: string | null = null;
 
+  @Output() bannerImageUploaded = new EventEmitter<File>();
+  bannerImageUrl: string | null = null;
+
   closeEdit() {
     this.dialog.closeAll();
   }
@@ -32,6 +35,12 @@ export class EditProfileModalComponent implements OnInit {
     this.imageUploaded.emit(file);
   }
 
+  onFileSelectedBanner(event: any) {
+    const bannerFile: File = event.target.files[0];
+    this.convertToBase64Banner(bannerFile);
+    this.bannerImageUploaded.emit(bannerFile);
+  }
+
   convertToBase64(file: File) {
     const reader = new FileReader();
     reader.onload = () => {
@@ -40,7 +49,15 @@ export class EditProfileModalComponent implements OnInit {
     reader.readAsDataURL(file);
   }
 
-  async onEdit (id: string, description: string, imageInput: HTMLInputElement, data: any) {
+  convertToBase64Banner(file: File) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.bannerImageUrl = reader.result as string;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  async onEdit (id: string, description: string, imageInput: HTMLInputElement, data: any, bannerImageInput: HTMLInputElement) {
     data.date = new Date();
     console.log(data);
 
@@ -50,14 +67,14 @@ export class EditProfileModalComponent implements OnInit {
       description: description ? description : data[3],
     };
 
-    console.log(data[4]);
-
     this.dialog.closeAll();
     await this.firebaseService.updateUser(
       data[0], 
       updatedData, 
       imageInput.files && imageInput.files.length > 0 ? imageInput : data[4],
-      data[4]
+      data[4],
+      bannerImageInput.files && bannerImageInput.files.length > 0 ? bannerImageInput : data[5],
+      data[5]
     );
     this.router.navigateByUrl('threads');
     

@@ -15,6 +15,7 @@ export class ProfileComponent implements OnInit {
   user: any;
   user_profile_picture_url: string;
   user_description: string;
+  user_banner_url: string;
 
   constructor(
     public firebaseService: FirebaseService, 
@@ -28,6 +29,7 @@ export class ProfileComponent implements OnInit {
     this.user = await this.firebaseService.getUserInfo();
     this.user_profile_picture_url = this.user[4];
     this.user_description = this.user[3];
+    this.user_banner_url = this.user[5];
   }
 
   openEditProfile(){

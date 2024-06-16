@@ -71,7 +71,7 @@ export class FirebaseService {
       
       if (!querySnapshot.empty) {
         const doc = querySnapshot.docs[0];
-        return [doc.id, doc.data()['username'], doc.data()['email'], doc.data()['description'], doc.data()['profile_picture']];
+        return [doc.id, doc.data()['username'], doc.data()['email'], doc.data()['description'], doc.data()['profile_picture'], doc.data()['banner_image']];
       } else {
         return {};
       }
@@ -153,7 +153,7 @@ export class FirebaseService {
     }
   }
 
-  async updateUser(id: string, data: any, fileInput: HTMLInputElement | null, previousProfilePicture: string = '') {
+  async updateUser(id: string, data: any, fileInput: HTMLInputElement | null, previousProfilePicture: string = '', bannerImageInput: HTMLInputElement | null, previousBannerImage: string = '') {
     try {
       if (fileInput && fileInput.files && fileInput.files.length > 0) {
         const imageFile = fileInput.files[0];
@@ -170,6 +170,23 @@ export class FirebaseService {
         data.profile_picture = downloadURL ? downloadURL : '';
       } else {
         data.profile_picture = previousProfilePicture;
+      }
+
+      if (bannerImageInput && bannerImageInput.files && bannerImageInput.files.length > 0) {
+        const bannerImageFile = bannerImageInput.files[0];
+        const bannerFileContent = await this.readFileContent(bannerImageFile);
+
+        const uploadedBannerFile = new File([bannerFileContent], bannerImageFile.name, {
+          type: bannerImageFile.type,
+        });
+
+        const storageRef = this.firebaseStorage.ref('');
+        const bannerImageRef = storageRef.child(uploadedBannerFile.name);
+        const snapshot = await bannerImageRef.put(uploadedBannerFile);
+        const downloadURL = await snapshot.ref.getDownloadURL();
+        data.banner_image = downloadURL ? downloadURL : '';
+      } else {
+        data.banner_image = previousBannerImage;
       }
 
       console.log(data);

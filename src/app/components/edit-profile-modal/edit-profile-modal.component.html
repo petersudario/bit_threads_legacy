@@ -40,9 +40,39 @@
         </div>
       </div>
     </div>
+    <div class="container mb-4">
+      <div class="row">
+        <div class="col">
+          <label for="threadTextarea" class="form-label">Banner do perfil</label>
+
+          <div class="row mt-3" *ngIf="bannerImageUrl">
+            <div class="col mb-4">
+              <img [src]="bannerImageUrl" class="img-fluid" alt="Image Preview" />
+            </div>
+          </div>
+          <div
+            class="drop-container border border-dashed border-3 border-secondary rounded p-3 p-md-5 text-center"
+          >
+            <p class="mb-0">
+              Arraste e solte a imagem aqui ou clique para selecionar
+            </p>
+            <input
+              type="file"
+              #bannerInput
+              (change)="onFileSelectedBanner($event)"
+              accept="image/*"
+              hidden
+            />
+            <button class="btn btn-primary mt-3" (click)="bannerInput.click()">
+              Selecionar Imagem
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   <div class="card-footer d-flex justify-content-end">
-    <button class="btn btn-success me-2" mat-button (click)="onEdit(data.id, description.value, imageInput, data)">
+    <button class="btn btn-success me-2" mat-button (click)="onEdit(data.id, description.value, imageInput, data, bannerInput)">
       Enviar
     </button>
     <button class="btn btn-danger" mat-button (click)="closeEdit()">
