@@ -17,10 +17,11 @@ export class ThreadsComponent implements OnInit {
     public dialog: MatDialog
   ) {}
   loggedUser: string = '';
-
-  ngOnInit(): void {
+  userInfo: any;
+  async ngOnInit() {
     this.fetchThreads();
-    this.setLoggedUser();
+    this.loggedUser = await this.firebaseService.getUserName();
+    this.userInfo = await this.firebaseService.getUserInfo();
   }
 
   setLoggedUser() {
@@ -44,10 +45,18 @@ export class ThreadsComponent implements OnInit {
     });
   }
 
-  fetchThreads() {
+  async fetchThreads() {
     this.firebaseService.getDocuments().subscribe((threads: any[]) => {
       this.threads = threads;
+      let thread_profile_picture = '';
       this.threads.map((thread) => {
+        this.firebaseService.getThreadProfilePicture(thread.username).then((url) => {
+          thread_profile_picture = url;
+        }).then(() => {
+
+          thread.profile_picture = thread_profile_picture;
+        }
+        );
         let today = new Date();
         let difference = today.getTime() - thread.date.toDate().getTime();
 

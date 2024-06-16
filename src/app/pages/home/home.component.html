@@ -59,63 +59,65 @@
 
 <section class="latest-posts-section bg-dark py-5">
   <div class="container">
-    <h2 class="pb-4 text-light">Latest Posts</h2>
+    <h2 class="pb-4 text-light">Threads mais recentes</h2>
     <div class="row">
-      <div class="col-md-4 mb-4" *ngFor="let thread of threads">
+      <div class="col-md-4 mb-4" *ngFor="let thread of threads | slice:0:3">
         <div class="card" style="min-height: 284px;">
           <div class="image-container">
-            <img [src]="thread.imageUrl ? thread.imageUrl : 'https://via.placeholder.com/400x300'" class="card-img-top" style="max-height: 200px" />
+            <img [src]="thread.imageUrl ? thread.imageUrl : ''" class="card-img-top" style="min-height: 200px; max-height: 200px; object-fit: cover;" />
             <div class="username-overlay">@{{ thread.username }}</div>
           </div>
       
           <div class="card-body">
-            <h5 class="card-title">{{ thread.postTitle }}</h5>
+            <h2 class="card-title">{{ thread.postTitle }}</h2>
             <p class="card-text">{{ thread.postText }}</p>
           </div>
         </div>
       </div>
-      
     </div>
   </div>
 </section>
 
-<!-- News Section -->
 <section class="bg-light news-section py-5">
   <div class="container">
-    <h2 class="pb-4">News</h2>
+    <h2 class="pb-4">Notícias</h2>
     <div id="newsCarousel" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner">
-        <div class="carousel-item active">
+        <div class="carousel-item active" style="max-width: 1296px; min-height: 648px;  max-height: 648px">
           <img
-            src="https://via.placeholder.com/800x400"
-            class="d-block w-100"
+            src="../../../assets/images/Apple_news.png"
+            style="width: 100%; height: 100%; object-fit: cover; object-position: center"
             alt="News 1"
           />
-          <div class="carousel-caption d-none d-md-block">
-            <h5>Breaking News 1</h5>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+          <div class="carousel-caption d-none d-md-block username-overlay">
+            <h2>Apple Inc.</h2>
+            <h3>A grande big tech "Apple Inc." abriu novas vagas para desenvolvedores Swift e Objective-C.</h3>
+            <p>Clique para saber mais</p>
+
           </div>
         </div>
-        <div class="carousel-item">
+        <div class="carousel-item" style="max-width: 1296px; min-height: 648px; max-height: 648px">
           <img
-            src="https://via.placeholder.com/800x400"
-            class="d-block w-100"
-            alt="News 2"
+            src="../../../assets/images/OpenAI_News.png"
+            style="width: 100%; height: 100%; object-fit: cover; object-position: center"
+            alt="News 1"
           />
-          <div class="carousel-caption d-none d-md-block">
-            <h5>Breaking News 2</h5>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+          <div class="carousel-caption d-none d-md-block username-overlay">
+            <h2>OpenAI</h2>
+            <h3>Empresa criadora do ChatGPT e DALL-E, anúncia que suas inteligências artificiais são capazes de pensar e sentir.</h3>
+            <p>Clique para saber mais</p>
           </div>
         </div>
-        <div class="carousel-item">
+        <div class="carousel-item" style="max-width: 1296px; min-height: 648px; max-height: 648px">
           <img
-            src="https://via.placeholder.com/800x400"
-            class="d-block w-100"
-            alt="News 3"
+            src="../../../assets/images/Eldenring_news.png"
+            style="width: 100%; height: 100%; object-fit: cover; object-position: center"
+            alt="News 1"
           />
-          <div class="carousel-caption d-none d-md-block">
-            <h5>Breaking News 3</h5>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+          <div class="carousel-caption d-none d-md-block username-overlay">
+            <h2>Elden Ring</h2>
+            <h3>Elden Ring, ganhador do GOTY de 2024, anúncia lançamento de sua nova DLC para Junho deste ano!</h3>
+            <p>Clique para saber mais</p>
           </div>
         </div>
       </div>

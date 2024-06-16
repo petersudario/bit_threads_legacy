@@ -1,11 +1,10 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FirebaseService } from 'src/app/services/FirebaseService.service';
 
-
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.css'],
 })
 export class HomeComponent implements OnInit {
   threads: any[] = [];
@@ -21,7 +20,7 @@ export class HomeComponent implements OnInit {
   fetchThreads() {
     this.firebaseService.getDocuments().subscribe((threads: any[]) => {
       this.threads = threads;
-      this.threads.map((thread) => {
+      this.threads.forEach((thread) => {
         let today = new Date();
         let difference = today.getTime() - thread.date.toDate().getTime();
 
@@ -45,8 +44,12 @@ export class HomeComponent implements OnInit {
         } else {
           thread.date = 'Agora';
         }
+
+        // Truncate postText if it exceeds 80 characters
+        if (thread.postText && thread.postText.length > 70) {
+          thread.postText = thread.postText.substring(0, 50) + '... Ver mais';
+        }
       });
     });
   }
-
 }

@@ -62,6 +62,24 @@ export class FirebaseService {
     }
   }
 
+  async getThreadProfilePicture(username: string): Promise<string> {
+    try {
+      const querySnapshot = await this.firebaseStore.collection('user_info', ref => ref.where('username', '==', username)).get().toPromise();
+      
+      if (!querySnapshot.empty) {
+        const doc = querySnapshot.docs[0];
+        const data = doc.data();
+        const profilePicture = data['profile_picture'];
+        return profilePicture;
+      } else {
+        return '';
+      }
+    } catch (error) {
+      console.error('Error fetching profile picture:', error);
+      throw error; 
+    }
+  }
+
   async getUserInfo(): Promise<any> {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     const email = user.email;
