@@ -3,6 +3,8 @@ import { FirebaseService } from 'src/app/services/FirebaseService.service';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { EditProfileModalComponent } from 'src/app/components/edit-profile-modal/edit-profile-modal.component';
+import { DeleteModalComponent } from 'src/app/components/delete-modal/delete-modal.component';
+import { ModalComponent } from 'src/app/components/edit-modal/modal-component.component';
 
 @Component({
   selector: 'app-profile',
@@ -11,11 +13,14 @@ import { EditProfileModalComponent } from 'src/app/components/edit-profile-modal
 })
 export class ProfileComponent implements OnInit {
 
-  username : String;
+  username : string;
   user: any;
   user_profile_picture_url: string;
   user_description: string;
   user_banner_url: string;
+  user_threads: any;
+  loggedUser: string = '';
+  userInfo: any;
 
   constructor(
     public firebaseService: FirebaseService, 
@@ -30,6 +35,13 @@ export class ProfileComponent implements OnInit {
     this.user_profile_picture_url = this.user[4];
     this.user_description = this.user[3];
     this.user_banner_url = this.user[5];
+    this.user_threads = await this.firebaseService.getUserThreads(this.username);
+    this.loggedUser = await this.firebaseService.getUserName();
+    this.userInfo = await this.firebaseService.getUserInfo();
+
+    await this.user_threads.forEach((thread) => {
+      thread.date = this.firebaseService.formatDate(thread.date);
+    });
   }
 
   openEditProfile(){
@@ -39,5 +51,18 @@ export class ProfileComponent implements OnInit {
     });
     
   }
+  openEdit(thread: any) {
+    this.dialog.open(ModalComponent, {
+      width: '400px',
+      data: thread,
+    });
+  }
+
+  openDelete(thread: any) {
+    this.dialog.open(DeleteModalComponent, {
+      data: thread,
+    });
+  }
+
 
 }
