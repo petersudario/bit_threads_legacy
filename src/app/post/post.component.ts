@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 })
 export class PostComponent implements OnInit {
   postForm: FormGroup; // Declare postForm of type FormGroup
+  @Output() imageUploaded = new EventEmitter<File>();
   imageUrl: string | null = null;
   showNotification = false;
   notificationMessage = '';
@@ -37,7 +38,6 @@ export class PostComponent implements OnInit {
     return null;
   }
 
-  @Output() imageUploaded = new EventEmitter<File>();
 
   onFileSelected(event: any) {
     const file: File = event.target.files[0];
@@ -62,7 +62,7 @@ export class PostComponent implements OnInit {
     return trimmedUsername;
   }
 
-  async onPosting() {
+  async onPosting(imageInput: HTMLInputElement) {
     if (this.postForm.invalid) {
       // Mark all form controls as touched to display validation messages
       Object.values(this.postForm.controls).forEach(control => {
@@ -71,7 +71,8 @@ export class PostComponent implements OnInit {
       return;
     }
 
-    const { postTitle, postText, imageInput } = this.postForm.value;
+    const { postTitle, postText } = this.postForm.value;
+    console.log(this.postForm.value)
     const date = new Date();
     const username = await this.firebaseService.getUserName();
 
