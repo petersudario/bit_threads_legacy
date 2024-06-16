@@ -153,7 +153,7 @@ export class FirebaseService {
     }
   }
 
-  async updateUser(id: string, data: any, fileInput: HTMLInputElement | null) {
+  async updateUser(id: string, data: any, fileInput: HTMLInputElement | null, previousProfilePicture: string = '') {
     try {
       if (fileInput && fileInput.files && fileInput.files.length > 0) {
         const imageFile = fileInput.files[0];
@@ -169,7 +169,7 @@ export class FirebaseService {
         const downloadURL = await snapshot.ref.getDownloadURL();
         data.profile_picture = downloadURL ? downloadURL : '';
       } else {
-        data.profile_picture = "";
+        data.profile_picture = previousProfilePicture;
       }
 
       console.log(data);

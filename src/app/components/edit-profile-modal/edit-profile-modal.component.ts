@@ -43,18 +43,21 @@ export class EditProfileModalComponent implements OnInit {
   async onEdit (id: string, description: string, imageInput: HTMLInputElement, data: any) {
     data.date = new Date();
     console.log(data);
+
     let updatedData = {
       username: data[1],
       email: data[2],
-      description: data[3],
+      description: description ? description : data[3],
     };
-    console.log(data[0]);
+
+    console.log(data[4]);
 
     this.dialog.closeAll();
     await this.firebaseService.updateUser(
       data[0], 
       updatedData, 
-      imageInput.files && imageInput.files.length > 0 ? imageInput : null
+      imageInput.files && imageInput.files.length > 0 ? imageInput : data[4],
+      data[4]
     );
     this.router.navigateByUrl('threads');
     
