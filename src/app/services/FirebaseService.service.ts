@@ -41,10 +41,9 @@ export class FirebaseService {
     await this.firebaseStore.collection('user_info').add(data);
   }
 
-  async getUser(): Promise<string> {
+  async getUserName(): Promise<string> {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     const email = user.email;
-    console.log(email);
 
     try {
       const querySnapshot = await this.firebaseStore.collection('user_info', ref => ref.where('email', '==', email)).get().toPromise();
@@ -53,14 +52,53 @@ export class FirebaseService {
         const doc = querySnapshot.docs[0];
         const data = doc.data();
         const username = data['username'];
-        console.log(username);
         return username;
       } else {
         return '';
       }
     } catch (error) {
       console.error('Error fetching username:', error);
-      throw error; // Rethrow the error to handle it in the calling code if needed
+      throw error; 
+    }
+  }
+
+  async getUserInfo(): Promise<any> {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const email = user.email;
+
+    try {
+      const querySnapshot = await this.firebaseStore.collection('user_info', ref => ref.where('email', '==', email)).get().toPromise();
+      
+      if (!querySnapshot.empty) {
+        const doc = querySnapshot.docs[0];
+        return [doc.id, doc.data()['username'], doc.data()['email'], doc.data()['description'], doc.data()['profile_picture']];
+      } else {
+        return {};
+      }
+    } catch (error) {
+      console.error('Error fetching user info:', error);
+      throw error; 
+    }
+  }
+
+  async getUserProfilePicture(): Promise<string> {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const email = user.email;
+
+    try {
+      const querySnapshot = await this.firebaseStore.collection('user_info', ref => ref.where('email', '==', email)).get().toPromise();
+      
+      if (!querySnapshot.empty) {
+        const doc = querySnapshot.docs[0];
+        const data = doc.data();
+        const profilePicture = data['profile_picture'];
+        return profilePicture;
+      } else {
+        return '';
+      }
+    } catch (error) {
+      console.error('Error fetching profile picture:', error);
+      throw error; 
     }
   }
 
@@ -112,6 +150,33 @@ export class FirebaseService {
       }
     } catch (error) {
       console.error('Error uploading image or adding document: ', error);
+    }
+  }
+
+  async updateUser(id: string, data: any, fileInput: HTMLInputElement | null) {
+    try {
+      if (fileInput && fileInput.files && fileInput.files.length > 0) {
+        const imageFile = fileInput.files[0];
+        const fileContent = await this.readFileContent(imageFile);
+
+        const uploadedFile = new File([fileContent], imageFile.name, {
+          type: imageFile.type,
+        });
+
+        const storageRef = this.firebaseStorage.ref('');
+        const imageRef = storageRef.child(uploadedFile.name);
+        const snapshot = await imageRef.put(uploadedFile);
+        const downloadURL = await snapshot.ref.getDownloadURL();
+        data.profile_picture = downloadURL ? downloadURL : '';
+      } else {
+        data.profile_picture = "";
+      }
+
+      console.log(data);
+
+      await this.firebaseStore.collection('user_info').doc(id).update(data);
+    } catch (error) {
+      console.error('Error updating user: ', error);
     }
   }
 

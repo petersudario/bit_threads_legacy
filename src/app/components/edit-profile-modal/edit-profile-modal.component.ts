@@ -4,11 +4,11 @@ import { FirebaseService } from 'src/app/services/FirebaseService.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-modal-component',
-  templateUrl: './modal-component.component.html',
-  styleUrls: ['./modal-component.component.css'],
+  selector: 'app-edit-profile-modal',
+  templateUrl: './edit-profile-modal.component.html',
+  styleUrls: ['./edit-profile-modal.component.css']
 })
-export class ModalComponent implements OnInit {
+export class EditProfileModalComponent implements OnInit {
   constructor(
     public firebaseService: FirebaseService,
     public dialog: MatDialog,
@@ -40,25 +40,25 @@ export class ModalComponent implements OnInit {
     reader.readAsDataURL(file);
   }
 
-  async onEdit (id: string, postTitle: string, postText: string, imageInput: HTMLInputElement, data: any) {
+  async onEdit (id: string, description: string, imageInput: HTMLInputElement, data: any) {
     data.date = new Date();
+    console.log(data);
     let updatedData = {
-      username: data.username,
-      postTitle: postTitle,
-      date: data.date,
-      postText: postText,
+      username: data[1],
+      email: data[2],
+      description: data[3],
     };
-    
+    console.log(data[0]);
+
     this.dialog.closeAll();
-    await this.firebaseService.updateDocument(
-      data.id, 
+    await this.firebaseService.updateUser(
+      data[0], 
       updatedData, 
       imageInput.files && imageInput.files.length > 0 ? imageInput : null
     );
     this.router.navigateByUrl('threads');
     
     window.location.reload();
-
   }
 
 }

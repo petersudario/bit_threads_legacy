@@ -15,6 +15,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ModalComponent } from './components/edit-modal/modal-component.component';
 import { DeleteModalComponent } from './components/delete-modal/delete-modal.component';
+import { ProfileComponent } from './pages/profile/profile.component';
+import { EditProfileModalComponent } from './components/edit-profile-modal/edit-profile-modal.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +30,8 @@ import { DeleteModalComponent } from './components/delete-modal/delete-modal.com
     PostComponent,
     ModalComponent,
     DeleteModalComponent,
+    ProfileComponent,
+    EditProfileModalComponent,
   ],
   imports: [
     BrowserModule,
@@ -47,6 +51,6 @@ import { DeleteModalComponent } from './components/delete-modal/delete-modal.com
   ],
   providers: [FirebaseService],
   bootstrap: [AppComponent],
-  entryComponents: [ModalComponent, DeleteModalComponent],
+  entryComponents: [ModalComponent, DeleteModalComponent, EditProfileModalComponent],
 })
 export class AppModule {}

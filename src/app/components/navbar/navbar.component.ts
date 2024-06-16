@@ -10,13 +10,15 @@ export class NavbarComponent implements OnInit {
   @Output() isLogout = new EventEmitter<void>()
   isSignedIn : boolean;
   username: string;
+  profile_picture_url: string;
 
   constructor(public firebaseService: FirebaseService, private router : Router) {}
 
   async ngOnInit() {
     if (localStorage.getItem('user') !== null) {
       this.isSignedIn = true;
-      this.username = await this.firebaseService.getUser();
+      this.username = await this.firebaseService.getUserName();
+      this.profile_picture_url = await this.firebaseService.getUserProfilePicture();
     }
     else this.isSignedIn = false;
 

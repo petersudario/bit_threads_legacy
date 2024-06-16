@@ -1,0 +1,17 @@
+/* Position the profile overlay */
+.profile-overlay {
+  z-index: 1; /* Ensure it's above the background */
+}
+
+
+.bottom-0 {
+  bottom: 0;
+}
+
+.start-0 {
+  left: 0;
+}
+
+.translate-middle-y {
+  transform: translateY(50%);
+}
