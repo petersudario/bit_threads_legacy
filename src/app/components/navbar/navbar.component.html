@@ -41,10 +41,7 @@
             Feed
           </button>
         </li>
-        <li
-          *ngIf="isSignedIn && isRoute('/threads')"
-          class="nav-item"
-        >
+        <li *ngIf="isSignedIn && isRoute('/threads')" class="nav-item">
           <button
             (click)="redirect('threads/create_thread')"
             class="btn btn-link text-white text-decoration-none align-items-center"
@@ -90,25 +87,42 @@
       <ul class="navbar-nav ms-auto align-items-center">
         <ng-container *ngIf="isSignedIn">
           <li class="nav-item d-flex align-items-center">
-            <img *ngIf="profile_picture_url == ''"
-            src="assets/images/placeholder-user-pic.jpg"
+            <img
+              *ngIf="profile_picture_url === '' || profile_picture_url === null"
+              src="assets/images/placeholder-user-pic.jpg"
               alt="User"
               draggable="false"
               height="30"
               class="rounded-circle me-2"
-              style="max-width: 30px; max-height: 30px; object-fit: cover;"
-
+              style="
+                max-width: 30px;
+                max-height: 30px;
+                object-fit: cover;
+                cursor: pointer;
+              "
+              (click)="goToProfile()"
             />
-            <img *ngIf="profile_picture_url != ''"
-            [src]="profile_picture_url"
+            <img
+              *ngIf="profile_picture_url !== '' && profile_picture_url !== null"
+              [src]="profile_picture_url"
               alt="User"
               draggable="false"
               height="30"
               class="rounded-circle me-2"
-              style="max-width: 30px; max-height: 30px; object-fit: cover;"
-
+              style="
+                max-width: 30px;
+                max-height: 30px;
+                object-fit: cover;
+                cursor: pointer;
+              "
+              (click)="goToProfile()"
             />
-            <span class="text-white">{{ username }}</span>
+            <span
+              class="text-white"
+              style="cursor: pointer"
+              (click)="goToProfile()"
+              >{{ username }}</span
+            >
           </li>
           <li class="nav-item">
             <button
@@ -119,6 +133,7 @@
             </button>
           </li>
         </ng-container>
+
         <ng-container *ngIf="!isSignedIn">
           <li class="nav-item">
             <button
