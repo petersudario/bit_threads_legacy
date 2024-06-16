@@ -17,6 +17,7 @@ import { ModalComponent } from './components/edit-modal/modal-component.componen
 import { DeleteModalComponent } from './components/delete-modal/delete-modal.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { EditProfileModalComponent } from './components/edit-profile-modal/edit-profile-modal.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,8 @@ import { EditProfileModalComponent } from './components/edit-profile-modal/edit-
     }),
     BrowserAnimationsModule,
     MatDialogModule,
+    ReactiveFormsModule,
+    
   ],
   providers: [FirebaseService],
   bootstrap: [AppComponent],

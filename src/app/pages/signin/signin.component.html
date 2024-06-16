@@ -6,38 +6,48 @@
           <div class="row g-0">
             <div class="col-lg-6">
               <div class="card-body p-md-5 mx-md-4">
-
                 <div class="text-center">
-                  <img  src="assets/images/logo_BitThreads.png"
-                    style="width: 185px;" alt="logo">
+                  <img src="assets/images/logo_BitThreads.png" style="width: 185px;" alt="logo">
                   <h4 class="mt-1 mb-5 pb-1">Bem-vindo ao Bit Threads.</h4>
                 </div>
-
-                <form>
+                <form [formGroup]="signinForm" (ngSubmit)="onSignin()">
                   <p>Por favor, entre com a sua conta.</p>
 
-                  <div data-mdb-input-init class="form-outline mb-4">
+                  <div class="form-outline mb-4">
                     <label class="form-label" for="email">E-mail</label>
-                    <input type="email" id="email" #emailSignin class="form-control"/>
+                    <input type="email" formControlName="email" id="email" class="form-control" />
+                    <div *ngIf="signinForm.get('email').invalid && signinForm.get('email').touched" class="text-danger">
+                      <div *ngIf="signinForm.get('email').hasError('required')">E-mail é obrigatório.</div>
+                      <div *ngIf="signinForm.get('email').hasError('email')">E-mail inválido.</div>
+                    </div>
                   </div>
 
-                  <div data-mdb-input-init class="form-outline mb-4">
-                    <label class="form-label" for="password">Password</label>
-                    <input id="password" type="password" #passwordSignin class="form-control" />
+                  <div class="form-outline mb-4">
+                    <label class="form-label" for="password">Senha</label>
+                    <input type="password" formControlName="password" id="password" class="form-control" />
+                    <div *ngIf="signinForm.get('password').invalid && signinForm.get('password').touched" class="text-danger">
+                      <div *ngIf="signinForm.get('password').hasError('required')">Senha é obrigatória.</div>
+                      <div *ngIf="signinForm.get('password').hasError('minlength')">Senha deve ter no mínimo 6 caracteres.</div>
+                    </div>
                   </div>
 
-                  <div class="d-flex flex-column text-center pt-1 mb-5 pb-1 ">
-                    <button (click)="onSignin(emailSignin.value, passwordSignin.value)" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="button">Entrar</button>
-                    <a class="text-muted" href="#!">Esqueceu sua senha?</a>
+                  <div class="d-flex flex-column text-center pt-1 mb-5 pb-1">
+                    <button type="submit" class="btn btn-primary btn-block gradient-custom-2 mb-3" [disabled]="signinForm.invalid">Entrar</button>
+                    <a class="text-muted" href="#">Esqueceu sua senha?</a>
+                  </div>
+
+                  <!-- Notification Section -->
+                  <div *ngIf="showNotification" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ notificationMessage }}
+                    <button type="button" class="btn-close" aria-label="Close" (click)="closeNotification()"></button>
                   </div>
 
                   <div class="d-flex align-items-center justify-content-center pb-4">
                     <p class="mb-0 me-2">Não tem uma conta?</p>
-                    <button type="button" (click)="redirect('signup')" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-danger">Criar conta</button>
+                    <button type="button" (click)="redirect('signup')" class="btn btn-outline-danger">Criar conta</button>
                   </div>
 
                 </form>
-
               </div>
             </div>
             <div class="col-lg-6 d-flex align-items-center gradient-custom-2">

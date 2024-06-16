@@ -62,6 +62,16 @@ export class FirebaseService {
     }
   }
 
+  async checkIfUserExists(field: 'email' | 'username', value: string): Promise<boolean> {
+    try {
+      const querySnapshot = await this.firebaseStore.collection('user_info', ref => ref.where(field, '==', value)).get().toPromise();
+      return !querySnapshot.empty;
+    } catch (error) {
+      console.error('Error checking if user exists:', error);
+      throw error; 
+    }
+  }
+
   async getThreadProfilePicture(username: string): Promise<string> {
     try {
       const querySnapshot = await this.firebaseStore.collection('user_info', ref => ref.where('username', '==', username)).get().toPromise();
