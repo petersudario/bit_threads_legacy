@@ -41,20 +41,25 @@ export class ModalComponent implements OnInit {
     reader.readAsDataURL(file);
   }
 
-  onEdit(id: string, postTitle: string, postText: string, imageUrl: string, data: any) {
+  async onEdit (id: string, postTitle: string, postText: string, imageInput: HTMLInputElement, data: any) {
     data.date = new Date();
     let updatedData = {
       username: data.username,
       postTitle: postTitle,
       date: data.date,
       postText: postText,
-      imageUrl: data.imageUrl,
     };
-  
-    this.firebaseService.updateDocument(data.id, updatedData);
+    
+    this.dialog.closeAll();
+    await this.firebaseService.updateDocument(
+      data.id, 
+      updatedData, 
+      imageInput.files && imageInput.files.length > 0 ? imageInput : null
+    );
     this.router.navigateByUrl('threads');
+    
+    window.location.reload();
 
   }
 
-  
 }

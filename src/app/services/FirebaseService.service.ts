@@ -88,8 +88,25 @@ export class FirebaseService {
     }
   }
 
-  async updateDocument(id: string, data: any) {
+  async updateDocument(id: string, data: any, fileInput: HTMLInputElement | null) {
     try {
+      if (fileInput && fileInput.files && fileInput.files.length > 0) {
+        const imageFile = fileInput.files[0];
+        const fileContent = await this.readFileContent(imageFile);
+  
+        const uploadedFile = new File([fileContent], imageFile.name, {
+          type: imageFile.type,
+        });
+  
+        const storageRef = this.firebaseStorage.ref('');
+        const imageRef = storageRef.child(uploadedFile.name);
+        const snapshot = await imageRef.put(uploadedFile);
+        const downloadURL = await snapshot.ref.getDownloadURL();
+        data.imageUrl = downloadURL ? downloadURL : '';
+      }
+      else {
+        data.imageUrl = '';
+      }
       await this.firebaseStore.collection('threads').doc(id).update(data);
     } catch (error) {
       console.error('Error updating document: ', error);
