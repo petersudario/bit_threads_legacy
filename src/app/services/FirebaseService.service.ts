@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
-import { Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { Observable, Timestamp } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -292,4 +292,45 @@ export class FirebaseService {
       reader.readAsArrayBuffer(file);
     });
   }
+  
+  async getUserThreads(username: string) {
+    try {
+      const profile_picture = await this.getThreadProfilePicture(username);
+      const querySnapshot = await this.firebaseStore.collection('threads', ref => ref.where('username', '==', username)).get().toPromise();
+      return querySnapshot.docs.map(doc => {
+        
+        return { id: doc.id, ...(doc.data() as object), profile_picture: profile_picture};
+      });
+    } catch (error) {
+      console.error('Error fetching user threads:', error);
+      throw error; 
+    }
+  }
+
+  formatDate(date): string {
+    let today = new Date();
+    let difference = today.getTime() - date.toDate().getTime();
+
+    let daysDifference = Math.floor(difference / (1000 * 60 * 60 * 24));
+    let hoursDifference = Math.floor(
+      (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+    );
+    let minutesDifference = Math.floor(
+      (difference % (1000 * 60 * 60)) / (1000 * 60)
+    );
+    let secondsDifference = Math.floor((difference % (1000 * 60)) / 1000);
+
+    if (daysDifference > 0) {
+      return daysDifference + ' dia(s) atrás';
+    } else if (hoursDifference > 0) {
+      return hoursDifference + ' hora(s) atrás';
+    } else if (minutesDifference > 0) {
+      return minutesDifference + ' minuto(s) atrás';
+    } else if (secondsDifference > 0) {
+      return secondsDifference + ' segundo(s) atrás';
+    } else {
+      return 'Agora';
+    }
+  }
+    
 }
