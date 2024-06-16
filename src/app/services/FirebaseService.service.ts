@@ -3,7 +3,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -25,13 +25,43 @@ export class FirebaseService {
       });
   }
 
-  async signUp(email: string, password: string) {
+  async signUp(email: string, password: string, username: string) {
+    const data = {
+      username: username,
+      email: email,
+      profile_picture: '',
+    };
     await this.firebaseAuth
       .createUserWithEmailAndPassword(email, password)
       .then((res) => {
         this.isLogged = true;
         localStorage.setItem('user', JSON.stringify(res.user));
       });
+
+    await this.firebaseStore.collection('user_info').add(data);
+  }
+
+  async getUser(): Promise<string> {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const email = user.email;
+    console.log(email);
+
+    try {
+      const querySnapshot = await this.firebaseStore.collection('user_info', ref => ref.where('email', '==', email)).get().toPromise();
+      
+      if (!querySnapshot.empty) {
+        const doc = querySnapshot.docs[0];
+        const data = doc.data();
+        const username = data['username'];
+        console.log(username);
+        return username;
+      } else {
+        return '';
+      }
+    } catch (error) {
+      console.error('Error fetching username:', error);
+      throw error; // Rethrow the error to handle it in the calling code if needed
+    }
   }
 
   async logout() {
@@ -69,7 +99,6 @@ export class FirebaseService {
         };
 
         await this.firebaseStore.collection('threads').add(data);
-
       } else {
         const data = {
           username: username,
@@ -80,31 +109,32 @@ export class FirebaseService {
         };
 
         await this.firebaseStore.collection('threads').add(data);
-
       }
-
     } catch (error) {
       console.error('Error uploading image or adding document: ', error);
     }
   }
 
-  async updateDocument(id: string, data: any, fileInput: HTMLInputElement | null) {
+  async updateDocument(
+    id: string,
+    data: any,
+    fileInput: HTMLInputElement | null
+  ) {
     try {
       if (fileInput && fileInput.files && fileInput.files.length > 0) {
         const imageFile = fileInput.files[0];
         const fileContent = await this.readFileContent(imageFile);
-  
+
         const uploadedFile = new File([fileContent], imageFile.name, {
           type: imageFile.type,
         });
-  
+
         const storageRef = this.firebaseStorage.ref('');
         const imageRef = storageRef.child(uploadedFile.name);
         const snapshot = await imageRef.put(uploadedFile);
         const downloadURL = await snapshot.ref.getDownloadURL();
         data.imageUrl = downloadURL ? downloadURL : '';
-      }
-      else {
+      } else {
         data.imageUrl = '';
       }
       await this.firebaseStore.collection('threads').doc(id).update(data);
@@ -122,15 +152,18 @@ export class FirebaseService {
   }
 
   getDocuments(): Observable<any[]> {
-    return this.firebaseStore.collection('threads').snapshotChanges().pipe(
-      map(actions => {
-        return actions.map(a => {
-          const data: any = a.payload.doc.data();
-          const id = a.payload.doc.id;
-          return { id, ...data };
-        });
-      })
-    );
+    return this.firebaseStore
+      .collection('threads')
+      .snapshotChanges()
+      .pipe(
+        map((actions) => {
+          return actions.map((a) => {
+            const data: any = a.payload.doc.data();
+            const id = a.payload.doc.id;
+            return { id, ...data };
+          });
+        })
+      );
   }
 
   readFileContent(file: File): Promise<ArrayBuffer> {

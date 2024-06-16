@@ -48,9 +48,9 @@ export class PostComponent implements OnInit {
     imageInput: HTMLInputElement
   ) {
     const date = new Date();
-    const username = this.getUserEmail();
+    const username = await this.firebaseService.getUser();
     this.firebaseService.addDocument(
-      await username,
+      username,
       postTitle,
       date,
       postText,

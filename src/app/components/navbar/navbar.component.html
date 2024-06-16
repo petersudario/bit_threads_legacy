@@ -101,6 +101,10 @@
             Logout
           </button>
         </li>
+
+        <li *ngIf="isSignedIn">
+          <p class="text-white align-items-center">{{ username }}</p>
+        </li>
       </ul>
     </div>
   </div>

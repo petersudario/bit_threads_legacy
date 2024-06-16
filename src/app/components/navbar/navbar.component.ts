@@ -9,12 +9,17 @@ import { Router } from '@angular/router';
 export class NavbarComponent implements OnInit {
   @Output() isLogout = new EventEmitter<void>()
   isSignedIn : boolean;
+  username: string;
 
   constructor(public firebaseService: FirebaseService, private router : Router) {}
 
-  ngOnInit() {
-    if (localStorage.getItem('user') !== null) this.isSignedIn = true;
+  async ngOnInit() {
+    if (localStorage.getItem('user') !== null) {
+      this.isSignedIn = true;
+      this.username = await this.firebaseService.getUser();
+    }
     else this.isSignedIn = false;
+
   }
 
   async logout() {

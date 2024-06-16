@@ -21,8 +21,8 @@ export class SignupComponent {
     this.isSignedIn = false
   }
 
-  async onSignup(email: string, password: string) {
-    await this.firebaseService.signUp(email, password)
+  async onSignup(email: string, password: string, username: string) {
+    await this.firebaseService.signUp(email, password, username)
     if(this.firebaseService.isLogged)
       {
         this.isSignedIn = true
