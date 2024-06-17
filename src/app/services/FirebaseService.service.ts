@@ -46,8 +46,11 @@ export class FirebaseService {
     const email = user.email;
 
     try {
-      const querySnapshot = await this.firebaseStore.collection('user_info', ref => ref.where('email', '==', email)).get().toPromise();
-      
+      const querySnapshot = await this.firebaseStore
+        .collection('user_info', (ref) => ref.where('email', '==', email))
+        .get()
+        .toPromise();
+
       if (!querySnapshot.empty) {
         const doc = querySnapshot.docs[0];
         const data = doc.data();
@@ -58,24 +61,33 @@ export class FirebaseService {
       }
     } catch (error) {
       console.error('Error fetching username:', error);
-      throw error; 
+      throw error;
     }
   }
 
-  async checkIfUserExists(field: 'email' | 'username', value: string): Promise<boolean> {
+  async checkIfUserExists(
+    field: 'email' | 'username',
+    value: string
+  ): Promise<boolean> {
     try {
-      const querySnapshot = await this.firebaseStore.collection('user_info', ref => ref.where(field, '==', value)).get().toPromise();
+      const querySnapshot = await this.firebaseStore
+        .collection('user_info', (ref) => ref.where(field, '==', value))
+        .get()
+        .toPromise();
       return !querySnapshot.empty;
     } catch (error) {
       console.error('Error checking if user exists:', error);
-      throw error; 
+      throw error;
     }
   }
 
   async getThreadProfilePicture(username: string): Promise<string> {
     try {
-      const querySnapshot = await this.firebaseStore.collection('user_info', ref => ref.where('username', '==', username)).get().toPromise();
-      
+      const querySnapshot = await this.firebaseStore
+        .collection('user_info', (ref) => ref.where('username', '==', username))
+        .get()
+        .toPromise();
+
       if (!querySnapshot.empty) {
         const doc = querySnapshot.docs[0];
         const data = doc.data();
@@ -86,7 +98,7 @@ export class FirebaseService {
       }
     } catch (error) {
       console.error('Error fetching profile picture:', error);
-      throw error; 
+      throw error;
     }
   }
 
@@ -95,17 +107,27 @@ export class FirebaseService {
     const email = user.email;
 
     try {
-      const querySnapshot = await this.firebaseStore.collection('user_info', ref => ref.where('email', '==', email)).get().toPromise();
-      
+      const querySnapshot = await this.firebaseStore
+        .collection('user_info', (ref) => ref.where('email', '==', email))
+        .get()
+        .toPromise();
+
       if (!querySnapshot.empty) {
         const doc = querySnapshot.docs[0];
-        return [doc.id, doc.data()['username'], doc.data()['email'], doc.data()['description'], doc.data()['profile_picture'], doc.data()['banner_image']];
+        return [
+          doc.id,
+          doc.data()['username'],
+          doc.data()['email'],
+          doc.data()['description'],
+          doc.data()['profile_picture'],
+          doc.data()['banner_image'],
+        ];
       } else {
         return {};
       }
     } catch (error) {
       console.error('Error fetching user info:', error);
-      throw error; 
+      throw error;
     }
   }
 
@@ -114,8 +136,11 @@ export class FirebaseService {
     const email = user.email;
 
     try {
-      const querySnapshot = await this.firebaseStore.collection('user_info', ref => ref.where('email', '==', email)).get().toPromise();
-      
+      const querySnapshot = await this.firebaseStore
+        .collection('user_info', (ref) => ref.where('email', '==', email))
+        .get()
+        .toPromise();
+
       if (!querySnapshot.empty) {
         const doc = querySnapshot.docs[0];
         const data = doc.data();
@@ -126,13 +151,57 @@ export class FirebaseService {
       }
     } catch (error) {
       console.error('Error fetching profile picture:', error);
-      throw error; 
+      throw error;
     }
   }
 
   async logout() {
     await this.firebaseAuth.signOut();
     localStorage.removeItem('user');
+  }
+
+  async commentOnThread(threadId: string, comment: string, username: string) {
+    let profile_picture = await this.getThreadProfilePicture(username);
+
+    try {
+      const data = {
+        threadId: threadId,
+        comment: comment,
+        username: username,
+        profile_picture: profile_picture,
+        date: new Date(),
+      };
+      await this.firebaseStore.collection('comments').add(data);
+    } catch (error) {
+      console.error('Error commenting on thread: ', error);
+    }
+  }
+
+  async getComments(threadId: string) {
+    try {
+      const querySnapshot = await this.firebaseStore
+        .collection('comments', (ref) => ref.where('threadId', '==', threadId))
+        .get()
+        .toPromise();
+      const data = querySnapshot.docs.map((doc) => {
+        return { id: doc.id, ...(doc.data() as object) };
+      });
+      data.sort((a, b) => {
+        return b['date'] - a['date'];
+      });
+      return data;
+    } catch (error) {
+      console.error('Error fetching comments:', error);
+      throw error;
+    }
+  }
+
+  async deleteComment(id: string) {
+    try {
+      await this.firebaseStore.collection('comments').doc(id).delete();
+    } catch (error) {
+      console.error('Error deleting comment:', error);
+    }
   }
 
   async addDocument(
@@ -181,7 +250,14 @@ export class FirebaseService {
     }
   }
 
-  async updateUser(id: string, data: any, fileInput: HTMLInputElement | null, previousProfilePicture: string = '', bannerImageInput: HTMLInputElement | null, previousBannerImage: string = '') {
+  async updateUser(
+    id: string,
+    data: any,
+    fileInput: HTMLInputElement | null,
+    previousProfilePicture: string = '',
+    bannerImageInput: HTMLInputElement | null,
+    previousBannerImage: string = ''
+  ) {
     try {
       if (fileInput && fileInput.files && fileInput.files.length > 0) {
         const imageFile = fileInput.files[0];
@@ -200,13 +276,21 @@ export class FirebaseService {
         data.profile_picture = previousProfilePicture;
       }
 
-      if (bannerImageInput && bannerImageInput.files && bannerImageInput.files.length > 0) {
+      if (
+        bannerImageInput &&
+        bannerImageInput.files &&
+        bannerImageInput.files.length > 0
+      ) {
         const bannerImageFile = bannerImageInput.files[0];
         const bannerFileContent = await this.readFileContent(bannerImageFile);
 
-        const uploadedBannerFile = new File([bannerFileContent], bannerImageFile.name, {
-          type: bannerImageFile.type,
-        });
+        const uploadedBannerFile = new File(
+          [bannerFileContent],
+          bannerImageFile.name,
+          {
+            type: bannerImageFile.type,
+          }
+        );
 
         const storageRef = this.firebaseStorage.ref('');
         const bannerImageRef = storageRef.child(uploadedBannerFile.name);
@@ -216,8 +300,6 @@ export class FirebaseService {
       } else {
         data.banner_image = previousBannerImage;
       }
-
-      console.log(data);
 
       await this.firebaseStore.collection('user_info').doc(id).update(data);
     } catch (error) {
@@ -292,18 +374,24 @@ export class FirebaseService {
       reader.readAsArrayBuffer(file);
     });
   }
-  
+
   async getUserThreads(username: string) {
     try {
       const profile_picture = await this.getThreadProfilePicture(username);
-      const querySnapshot = await this.firebaseStore.collection('threads', ref => ref.where('username', '==', username)).get().toPromise();
-      return querySnapshot.docs.map(doc => {
-        
-        return { id: doc.id, ...(doc.data() as object), profile_picture: profile_picture};
+      const querySnapshot = await this.firebaseStore
+        .collection('threads', (ref) => ref.where('username', '==', username))
+        .get()
+        .toPromise();
+      return querySnapshot.docs.map((doc) => {
+        return {
+          id: doc.id,
+          ...(doc.data() as object),
+          profile_picture: profile_picture,
+        };
       });
     } catch (error) {
       console.error('Error fetching user threads:', error);
-      throw error; 
+      throw error;
     }
   }
 
@@ -332,5 +420,4 @@ export class FirebaseService {
       return 'Agora';
     }
   }
-    
 }

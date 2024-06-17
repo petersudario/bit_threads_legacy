@@ -64,7 +64,6 @@ export class PostComponent implements OnInit {
 
   async onPosting(imageInput: HTMLInputElement) {
     if (this.postForm.invalid) {
-      // Mark all form controls as touched to display validation messages
       Object.values(this.postForm.controls).forEach(control => {
         control.markAsTouched();
       });
@@ -72,7 +71,6 @@ export class PostComponent implements OnInit {
     }
 
     const { postTitle, postText } = this.postForm.value;
-    console.log(this.postForm.value)
     const date = new Date();
     const username = await this.firebaseService.getUserName();
 
