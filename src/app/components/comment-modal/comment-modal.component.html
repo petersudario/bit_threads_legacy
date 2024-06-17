@@ -78,7 +78,7 @@
           <span>@{{ comment.username }} comentou:</span><br />
           <p>"{{ comment.comment }}"</p>
         </div>
-        <button *ngIf="comment.username === data.username"
+        <button *ngIf="comment.username === signedUser"
           class="btn btn-outline-danger"
           (click)="onDeleteComment(comment.id)"
           style="width: 60px; font-size: 8px; padding: 2px"

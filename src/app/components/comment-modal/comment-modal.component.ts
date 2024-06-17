@@ -3,6 +3,7 @@ import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { FirebaseService } from 'src/app/services/FirebaseService.service';
 import { Router } from '@angular/router';
+import { CommentDeleteModalComponent } from '../comment-delete-modal/comment-delete-modal.component';
 
 @Component({
   selector: 'app-comment-modal',
@@ -62,12 +63,11 @@ export class CommentModalComponent implements OnInit {
     }
   }
 
-  async onDeleteComment(commentId: string) {
-    try {
-      await this.firebaseService.deleteComment(commentId);
-      this.comments = await this.firebaseService.getComments(this.data.id);
-    } catch (error) {
-      console.error('Error deleting comment:', error); // Debugging line
+  async onDeleteComment(id: string) {
+    let data = await this.firebaseService.getComment(id);
+    this.dialog.open(CommentDeleteModalComponent, {
+      data: data,
     }
+    )
   }
 }
