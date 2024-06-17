@@ -19,6 +19,7 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { EditProfileModalComponent } from './components/edit-profile-modal/edit-profile-modal.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommentModalComponent } from './components/comment-modal/comment-modal.component';
+import { CommentDeleteModalComponent } from './components/comment-delete-modal/comment-delete-modal.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { CommentModalComponent } from './components/comment-modal/comment-modal.
     ProfileComponent,
     EditProfileModalComponent,
     CommentModalComponent,
+    CommentDeleteModalComponent,
   ],
   imports: [
     BrowserModule,
@@ -56,6 +58,6 @@ import { CommentModalComponent } from './components/comment-modal/comment-modal.
   ],
   providers: [FirebaseService],
   bootstrap: [AppComponent],
-  entryComponents: [ModalComponent, DeleteModalComponent, EditProfileModalComponent, CommentModalComponent],
+  entryComponents: [ModalComponent, DeleteModalComponent, EditProfileModalComponent, CommentModalComponent, CommentDeleteModalComponent],
 })
 export class AppModule {}

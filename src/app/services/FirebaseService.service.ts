@@ -196,6 +196,16 @@ export class FirebaseService {
     }
   }
 
+  async getComment(id: string) {
+    try {
+      const doc = await this.firebaseStore.collection('comments').doc(id).get().toPromise();
+      return { id: doc.id, ...(doc.data() as object) };
+    } catch (error) {
+      console.error('Error fetching comment:', error);
+      throw error;
+    }
+  }
+
   async deleteComment(id: string) {
     try {
       await this.firebaseStore.collection('comments').doc(id).delete();
