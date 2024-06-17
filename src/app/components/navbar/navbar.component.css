@@ -12,3 +12,17 @@
   border-radius: 0.25rem;
   color: #fff;
 }
+
+
+@media (max-width: 991px){
+  .navbar-border {
+    border: #fff 1px solid;
+  }
+
+}
+
+@media (min-width: 992px){
+.navbar-size {
+  max-height: 60px;
+}
+}
