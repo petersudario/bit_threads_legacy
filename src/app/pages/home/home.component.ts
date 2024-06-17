@@ -47,7 +47,7 @@ export class HomeComponent implements OnInit {
 
         // Truncate postText if it exceeds 80 characters
         if (thread.postText && thread.postText.length > 70) {
-          thread.postText = thread.postText.substring(0, 50) + '... Ver mais';
+          thread.postText = thread.postText.substring(0, 50) + '... Ver ';
         }
       });
     });

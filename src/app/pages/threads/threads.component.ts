@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FirebaseService } from 'src/app/services/FirebaseService.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalComponent } from '../../components/edit-modal/modal-component.component';
 import { DeleteModalComponent } from '../../components/delete-modal/delete-modal.component';
+import { CommentModalComponent } from 'src/app/components/comment-modal/comment-modal.component';
 
 @Component({
   selector: 'app-threads',
@@ -12,13 +13,22 @@ import { DeleteModalComponent } from '../../components/delete-modal/delete-modal
 
 export class ThreadsComponent implements OnInit {
   threads: any[] = [];
+  loggedUser: string = '';
+  userInfo: any;
+  @Output() isLogout = new EventEmitter<void>();
+  isSignedIn: boolean;
+  
   constructor(
     public firebaseService: FirebaseService,
     public dialog: MatDialog
   ) {}
-  loggedUser: string = '';
-  userInfo: any;
+
   async ngOnInit() {
+    if (localStorage.getItem('user') !== null) {
+      this.isSignedIn = true;
+    } else {
+      this.isSignedIn = false;
+    }
     this.fetchThreads();
     this.loggedUser = await this.firebaseService.getUserName();
     this.userInfo = await this.firebaseService.getUserInfo();
@@ -29,6 +39,14 @@ export class ThreadsComponent implements OnInit {
       if (user) {
         this.loggedUser = user.email.split('@')[0];
       }
+    });
+  }
+
+  async onComment(thread: any) {
+    this.dialog.open(CommentModalComponent, {
+      width: '900px',
+      height: '600px',
+      data: thread,
     });
   }
 
